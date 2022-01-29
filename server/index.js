@@ -2,6 +2,8 @@
 
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '.env') })
+process.env.NODE_ENV = process.env.NODE_ENV || 'production'
+process.env.CONTENT = path.join(__dirname, process.env.CONTENT)
 
 const http = require('http')
 const express = require('express')
@@ -33,10 +35,7 @@ app.use((req, res, next) => {
   next()
 })
 
-// Handle session
-app.use(sessionParser)
-
-// Webpack middlewares
+// Setup webpack middlewares
 if (process.env.NODE_ENV === 'development') {
   const webpack = require('webpack')
   const config = require('../webpack.config.js')
@@ -52,21 +51,26 @@ if (process.env.NODE_ENV === 'development') {
   app.use(hotMiddleware)
 }
 
+// Handle session
+app.use(sessionParser)
+
 // Serve static files
 app.use(express.static(path.join(__dirname, '..', 'build')))
 app.use(express.static(path.join(__dirname, '..', 'static')))
 
-// Core renderer
+// Setup API
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use('/api', require('./api-middleware'))
+app.use('/api', require('./api/authenticate'))
+app.post('/api/bookmark', require('./api/add-bookmark'))
 
+// Setup front routes
 app.use('/logout', (req, res, next) => {
   req.session.authenticated = false
   req.session.save(() => res.redirect('/'))
 })
-
-app.use(require('./render-middleware'))
+app.use('/', require('./render/authenticate'))
+app.use('/', require('./render/bookmarks'))
 
 // Log errors
 app.use((err, req, res, next) => {
@@ -74,7 +78,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message })
 })
 
-// Server startup
+// Start server
 server.listen(process.env.PORT, () => {
   console.log(new Date(), `Server is up and running on port ${process.env.PORT}`)
 })

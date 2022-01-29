@@ -3,6 +3,12 @@
 
 <br>
 
+## Usage
+
+```console
+$ curl -X POST -H 'Authorization: Basic API_TOKEN' -H 'Content-Type: application/json' --data '{ "url": "https://example.com" }' …/api/bookmark
+```
+
 ## Development
 
 ### Installation

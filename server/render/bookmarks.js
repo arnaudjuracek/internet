@@ -7,11 +7,8 @@ const template = require('handlebars').compile(
   )
 )
 
-const BOOKMARKS = path.join(__dirname, '..', process.env.CONTENT, 'bookmarks.json')
-
-module.exports = async url => template({
-  isProduction: process.env.NODE_ENV !== 'development',
-  bookmarks: fs.readJsonSync(BOOKMARKS, 'utf8')
+module.exports = (req, res) => {
+  const bookmarks = fs.readJsonSync(path.join(process.env.CONTENT, 'bookmarks.json'), 'utf8')
     .sort((a, b) => b.timestamp - a.timestamp)
     .map((bookmark, index) => {
       try {
@@ -28,4 +25,9 @@ module.exports = async url => template({
       return bookmark
     })
     .filter(Boolean)
-})
+
+  res.send(template({
+    isProduction: process.env.NODE_ENV !== 'development',
+    bookmarks
+  }))
+}
