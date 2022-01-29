@@ -1,0 +1,117 @@
+$bookmarks-default-length: 20;
+
+body[data-template=bookmarks] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 3em;
+
+  input[type=search] {
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+
+    &:not(:focus):placeholder-shown {
+      background: var(--color--background);
+
+      // Show on desktop only via tab
+      @include desktop {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    &::placeholder {
+      color: var(--color--dim);
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: var(--gutter);
+    margin: 0 auto;
+    width: 100%;
+    max-width: 600px;
+
+    li {
+      margin: 0.3em 0;
+    }
+  }
+
+  .bookmark {
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+    color: var(--color--text);
+
+    overflow: hidden;
+    white-space: nowrap;
+
+    width: fit-content;
+    max-width: 100%;
+
+    @include mobile {
+      width: 100%;
+    }
+
+    &:focus,
+    &:hover {
+      outline: 0;
+      background: var(--color--highlight);
+    }
+
+    &__favicon {
+      @include no-select;
+      height: 1em;
+      width: auto;
+      margin-right: 1ch;
+    }
+
+    &__title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__hostname {
+      @include no-select;
+      margin-left: 1ch;
+      color: var(--color--dim);
+
+      @include mobile {
+        display: none;
+      }
+    }
+  }
+
+  label[for=showAll] {
+    @include no-select;
+    position: relative;
+    cursor: pointer;
+    float: right;
+    color: var(--color--dim);
+
+    margin-top: 1em;
+
+    &:hover {
+      color: var(--color--text);
+      background: var(--color--highlight);
+    }
+  }
+
+  // Search bar feature
+  input[type=search]:not(:placeholder-shown) ~ ul li .bookmark:not(.is-result) { display: none; }
+  input[type=search]:not(:placeholder-shown) ~ ul { flex: 1; }
+
+  // Show all feature
+  #showAll,
+  #showAll:not(:checked) ~ li:nth-child(#{$bookmarks-default-length}) ~ li,
+  #showAll:checked ~ label[for=showAll] {
+    display: none;
+  }
+}

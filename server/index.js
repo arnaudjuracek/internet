@@ -1,0 +1,80 @@
+#!/usr/bin/env node
+
+const path = require('path')
+require('dotenv').config({ path: path.resolve(__dirname, '.env') })
+
+const http = require('http')
+const express = require('express')
+const session = require('express-session')
+const FileStore = require('session-file-store')(session)
+
+const app = express()
+const server = http.createServer(app)
+const sessionParser = session({
+  saveUninitialized: false,
+  secret: process.env.PASSWORD,
+  store: new FileStore({
+    path: path.resolve(__dirname, process.env.SESSIONS),
+    logFn: message => console.log(new Date(), message),
+    encoding: 'utf8',
+    fileExtension: '.json'
+  }),
+  resave: false,
+  cookie: {
+    maxAge: 365 * 24 * 60 * 60 * 1000
+  }
+})
+
+// Log request
+app.use((req, res, next) => {
+  if (process.env.VERBOSE || process.env.NODE_ENV === 'development') {
+    console.log(new Date(), `[${req.method}]`, req.originalUrl)
+  }
+  next()
+})
+
+// Handle session
+app.use(sessionParser)
+
+// Webpack middlewares
+if (process.env.NODE_ENV === 'development') {
+  const webpack = require('webpack')
+  const config = require('../webpack.config.js')
+  const compiler = webpack(config)
+  const hotMiddleware = require('webpack-hot-middleware')(compiler)
+  const devMiddleware = require('webpack-dev-middleware')(compiler, {
+    serverSideRender: true,
+    stats: 'errors-warnings',
+    publicPath: config.output.publicPath
+  })
+
+  app.use(devMiddleware)
+  app.use(hotMiddleware)
+}
+
+// Serve static files
+app.use(express.static(path.join(__dirname, '..', 'build')))
+app.use(express.static(path.join(__dirname, '..', 'static')))
+
+// Core renderer
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use('/api', require('./api-middleware'))
+
+app.use('/logout', (req, res, next) => {
+  req.session.authenticated = false
+  req.session.save(() => res.redirect('/'))
+})
+
+app.use(require('./render-middleware'))
+
+// Log errors
+app.use((err, req, res, next) => {
+  console.error(new Date(), err)
+  res.status(500).json({ error: err.message })
+})
+
+// Server startup
+server.listen(process.env.PORT, () => {
+  console.log(new Date(), `Server is up and running on port ${process.env.PORT}`)
+})

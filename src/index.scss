@@ -1,0 +1,30 @@
+@import 'sass/helpers';
+
+@mixin desktop { @media screen and (min-width: 600px) { @content; } }
+@mixin mobile { @media screen and (max-width: 600px) { @content; } }
+
+:root {
+  --gutter: 2rem;
+
+  --font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-family--monospace: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --font-size: 1.4rem;
+  --line-height: 1.6;
+
+  --color--background: #F7F7F7;
+  --color--highlight: #FFEC3D66;
+  --color--border: #D8DEE4;
+  --color--text: #191919;
+  --color--dim: #{rgba(#191919, 0.2)};
+
+  @include mobile {
+    --gutter: 2.5rem;
+    --font-size: 1.4rem;
+    --line-height: 1.6;
+  }
+}
+
+@import 'sass/base';
+
+@import 'templates/authenticate';
+@import 'templates/bookmarks';
