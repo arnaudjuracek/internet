@@ -73,6 +73,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/api', require('./api/authenticate'))
 app.post('/api/bookmark', require('./api/add-bookmark'))
+app.delete('/api/bookmark', require('./api/delete-bookmark'))
 
 // Setup front routes
 app.use('/logout', (req, res, next) => {

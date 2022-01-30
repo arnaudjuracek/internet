@@ -89,6 +89,32 @@ body[data-template=bookmarks] {
     }
   }
 
+  .swiper {
+    @include invisible-scroll(x);
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: x;
+    overscroll-behavior: none;
+
+    & > *:first-child {
+      scroll-snap-align: start;
+      flex-grow: 2;
+      flex-shrink: 0;
+      flex-basis: 100%;
+    }
+
+    &__actions {
+      scroll-snap-align: start;
+      padding-left: var(--gutter);
+    }
+
+    &__actions button {
+      @include reset-button;
+      color: blue;
+      cursor: pointer;
+    }
+  }
+
   label[for=showAll] {
     @include no-select;
     position: relative;
