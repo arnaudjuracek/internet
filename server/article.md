@@ -5,9 +5,9 @@ description: |
   {{ excerpt }}
 lang: en
 icon: 🗄️
-author: {{ byline }} <{{ url })>
+author: {{ byline }} <{{ url }}>
 ---
 
-# {{title}}
+# {{ title }}
 
-{{markdown}}
+{{ markdown }}
