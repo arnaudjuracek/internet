@@ -1,7 +1,12 @@
 /* global self, fetch, caches */
 
 const NS = '{{PACKAGE_NAME}}@{{PACKAGE_VERSION}}'
-const CACHE = ['/', '/index.html']
+const CACHE = [
+  '/',
+  '/index.html',
+  'bundle.css',
+  'bundle.js'
+]
 
 self.addEventListener('install', e => {
   e.waitUntil((async () => {
