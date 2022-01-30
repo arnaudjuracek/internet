@@ -27,9 +27,7 @@ function parseFrontMatter (markdown) {
     (markdown.match(/^---(([\s\S])+?)---/) || [])[1] || ''
   )
 
-  if (!frontMatter) return
-
-  if (frontMatter.author) {
+  if (frontMatter && frontMatter.author) {
     const [, name, email, website] = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/g.exec(frontMatter.author) || []
     frontMatter.author = { name, email, website }
   }
@@ -47,7 +45,10 @@ module.exports = async (req, res) => {
     const archived = path.basename(path.dirname(file)) === 'archived'
     const markdown = await fs.readFile(file, 'utf8')
     const frontMatter = parseFrontMatter(markdown)
-    const url = process.env.ARTICLES_URL + filename
+    const url = archived
+      ? process.env.ARTICLES_URL + 'archived/' + filename
+      : process.env.ARTICLES_URL + filename
+
     articles.push({
       ...frontMatter,
       url: url.replace(/.md$/, ''),
