@@ -4,9 +4,9 @@ const fs = require('fs-extra')
 module.exports = async (req, res, next) => {
   try {
     // Try to move article to /archived
-    const filename = path.basename(req.body.url)
+    const filename = path.basename(req.body.url) + '.md'
     await fs.move(
-      path.join(process.env.ARTICLES, filename + '.md'),
+      path.join(process.env.ARTICLES, filename),
       path.join(process.env.ARTICLES, 'archived', filename)
     )
 
