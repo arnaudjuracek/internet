@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
     const url = process.env.ARTICLES_URL + filename
     articles.push({
       ...frontMatter,
-      url,
+      url: url.replace(/.md$/, ''),
       archived,
       title: frontMatter ? frontMatter.title : filename,
       filename,
