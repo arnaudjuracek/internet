@@ -5,9 +5,11 @@ require('webpack-hot-middleware/client?reload=true')
   .subscribe(({ reload }) => reload && window.location.reload())
 /// #endif
 
+/// #if !DEVELOPMENT
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js')
 }
+/// #endif
 
 // Search bar
 const search = document.querySelector('input[type=search]')
