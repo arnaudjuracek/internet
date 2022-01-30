@@ -59,6 +59,7 @@ $list-length: 20;
 
   label[for=showAll] {
     @include no-select;
+    display: none;
     position: relative;
     cursor: pointer;
     float: right;
@@ -69,6 +70,10 @@ $list-length: 20;
     &:hover {
       color: blue;
     }
+  }
+
+  li:nth-child(#{$list-length}) ~ label[for=showAll] {
+    display: block;
   }
 
   #showAll,
