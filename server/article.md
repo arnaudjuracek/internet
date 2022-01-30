@@ -5,9 +5,7 @@ description: |
   {{ excerpt }}
 lang: en
 icon: 🗄️
-author: |
-  {{ byline }}
-license: "{{ url }}"
+author: {{ byline }} <{{ url })>
 ---
 
 # {{title}}
