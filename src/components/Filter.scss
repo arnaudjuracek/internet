@@ -1,16 +1,9 @@
 input[type=search].filter {
-  z-index: 1;
-  position: fixed;
-  bottom: 0;
   width: 100%;
-
-  border-left: 0;
-  border-right: 0;
-  border-bottom: 0;
+  border: 0;
+  background: transparent;
 
   &:not(:focus):placeholder-shown {
-    background: var(--color--background);
-
     // Show on desktop only via tab
     @include desktop {
       opacity: 0;
@@ -23,5 +16,5 @@ input[type=search].filter {
   }
 }
 
-.filter:not(:placeholder-shown) ~ .list [data-filter]:not(.is-result) { display: none; }
-.filter:not(:placeholder-shown) ~ .list { flex: 1; }
+[data-filterable].is-filtered [data-filter]:not(.is-result) { display: none; }
+[data-filterable].is-filtered { flex: 1; }

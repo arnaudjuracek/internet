@@ -11,9 +11,12 @@
   {{/if}}
 </head>
 <body data-template='bookmarks'>
-  <input class='filter' type='search' placeholder='Filter…'>
+  <footer>
+    <input class='filter' type='search' placeholder='Filter…'>
+    <a href='/articles' tabindex='-1'>articles</a>
+  </footer>
 
-  <ul class='list'>
+  <ul class='list' data-filterable='true'>
     <input type='checkbox' id='showAll'>
     {{#each bookmarks}}
       <li data-filter='{{this.title}} {{this.hostname}}'>
@@ -35,7 +38,7 @@
     {{/each}}
     <label for='showAll'>show all</label>
   </ul>
-  <a id='goTo' href='/articles' >articles</a>
+
   <script src='/bundle.js'></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 @mixin mobile { @media screen and (max-width: 600px) { @content; } }
 
 :root {
-  --gutter: 2rem;
+  --gutter: 3rem;
 
   --font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-family--monospace: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
@@ -40,14 +40,36 @@ body[data-template=articles] {
   justify-content: center;
   padding-bottom: 3em;
 
-  #goTo {
-    z-index: 2;
+  footer {
+    z-index: 1;
     position: fixed;
-    bottom: calc(var(--gutter) / 2);
-    right: var(--gutter);
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
 
-    &:not(:hover) {
-      color: var(--color--dim);
+    border-top: 1px solid var(--color--border);
+    background: var(--color--background);
+
+    @include desktop {
+      &:not(:focus-within) {
+        border: 0;
+      }
+    }
+
+    &:focus-within {
+      background: white;
+    }
+
+    input[type=search] {
+      padding-right: 0;
+    }
+
+    a {
+      padding: 0 var(--gutter);
+      &:not(:hover) {
+        color: var(--color--dim);
+      }
     }
   }
 }
