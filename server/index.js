@@ -5,9 +5,11 @@ require('dotenv').config({ path: path.resolve(__dirname, '.env') })
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 process.env.CONTENT = path.join(__dirname, process.env.CONTENT)
 
+const fs = require('fs-extra')
 const http = require('http')
 const express = require('express')
 const session = require('express-session')
+const pkg = require('../package.json')
 const FileStore = require('session-file-store')(session)
 
 const app = express()
@@ -55,6 +57,14 @@ if (process.env.NODE_ENV === 'development') {
 app.use(sessionParser)
 
 // Serve static files
+app.use('/service-worker.js', async (req, res) => {
+  const sw = await fs.readFile(path.join(__dirname, '..', 'static', 'service-worker.js'), 'utf8')
+  res.type('.js')
+  res.send(sw
+    .replace('{{PACKAGE_NAME}}', pkg.name)
+    .replace('{{PACKAGE_VERSION}}', pkg.version)
+  )
+})
 app.use(express.static(path.join(__dirname, '..', 'build')))
 app.use(express.static(path.join(__dirname, '..', 'static')))
 
