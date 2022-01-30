@@ -21,8 +21,7 @@ module.exports = {
   resolve: {
     alias: {
       components: path.join(__dirname, 'src', 'components'),
-      controllers: path.join(__dirname, 'src', 'controllers'),
-      store: path.join(__dirname, 'src', 'store'),
+      templates: path.join(__dirname, 'src', 'templates'),
       utils: path.join(__dirname, 'src', 'utils')
     }
   },

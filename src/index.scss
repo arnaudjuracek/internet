@@ -26,5 +26,29 @@
 
 @import 'sass/base';
 
+@import 'components/Filter';
+@import 'components/List';
+@import 'components/Swiper';
+
+@import 'templates/articles';
 @import 'templates/authenticate';
-@import 'templates/bookmarks';
+
+body[data-template=bookmarks],
+body[data-template=articles] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 3em;
+
+  #goTo {
+    z-index: 2;
+    position: fixed;
+    bottom: calc(var(--gutter) / 2);
+    right: var(--gutter);
+
+    &:not(:hover) {
+      color: var(--color--dim);
+    }
+  }
+}
+

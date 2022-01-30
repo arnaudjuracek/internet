@@ -3,7 +3,9 @@
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '.env') })
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
-process.env.CONTENT = path.join(__dirname, process.env.CONTENT)
+
+process.env.ARTICLES = path.join(__dirname, process.env.ARTICLES)
+process.env.BOOKMARKS = path.join(__dirname, process.env.BOOKMARKS)
 
 const fs = require('fs-extra')
 const http = require('http')
@@ -57,8 +59,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use(sessionParser)
 
 // Serve static files
-app.use('/service-worker.js', async (req, res) => {
-  const sw = await fs.readFile(path.join(__dirname, '..', 'static', 'service-worker.js'), 'utf8')
+app.use('/sw.js', async (req, res) => {
+  const sw = await fs.readFile(path.join(__dirname, '..', 'static', 'sw.js'), 'utf8')
   res.type('.js')
   res.send(sw
     .replace('{{PACKAGE_NAME}}', pkg.name)
@@ -72,6 +74,8 @@ app.use(express.static(path.join(__dirname, '..', 'static')))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/api', require('./api/authenticate'))
+app.post('/api/article', require('./api/add-article'))
+app.delete('/api/article', require('./api/archive-article'))
 app.post('/api/bookmark', require('./api/add-bookmark'))
 app.delete('/api/bookmark', require('./api/delete-bookmark'))
 
@@ -80,7 +84,8 @@ app.use('/logout', (req, res, next) => {
   req.session.authenticated = false
   req.session.save(() => res.redirect('/'))
 })
-app.use('/', require('./render/authenticate'))
+app.use(require('./render/authenticate'))
+app.use('/articles', require('./render/articles'))
 app.use('/', require('./render/bookmarks'))
 
 // Log errors

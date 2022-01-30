@@ -1,0 +1,23 @@
+.swiper {
+  @include invisible-scroll(x);
+  display: flex;
+  scroll-snap-type: x;
+
+  & > *:first-child {
+    scroll-snap-align: start;
+    flex-grow: 2;
+    flex-shrink: 0;
+    flex-basis: 100%;
+  }
+
+  &__actions {
+    scroll-snap-align: start;
+    padding-left: var(--gutter);
+  }
+
+  &__actions button {
+    @include reset-button;
+    color: blue;
+    cursor: pointer;
+  }
+}

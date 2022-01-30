@@ -37,6 +37,11 @@ body {
   background: var(--color--highlight);
 }
 
+a {
+  text-decoration: none;
+  color: blue;
+}
+
 input[type=password],
 input[type=search],
 input[type=text] {

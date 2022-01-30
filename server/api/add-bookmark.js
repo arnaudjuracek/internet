@@ -2,16 +2,18 @@ const fs = require('fs-extra')
 const path = require('path')
 const fetch = require('node-fetch')
 
-const BOOKMARKS = path.join(process.env.CONTENT, 'bookmarks.json')
-
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     // Ensure webpage exists
     const response = await fetch(req.body.url)
-    if (response.status !== 200) throw new Error(response.statusText)
+
+    // TODO: handle 403 forbidden
+    if (response.status !== 200) {
+      throw new Error(`[${response.status}] ${response.statusText}`)
+    }
 
     // Ensure webpage is not already bookmarked
-    const bookmarks = await fs.readJson(BOOKMARKS)
+    const bookmarks = await fs.readJson(process.env.BOOKMARKS)
     for (const index in bookmarks) {
       if (bookmarks[index].url === req.body.url) delete bookmarks[index]
     }
@@ -27,10 +29,10 @@ module.exports = async (req, res) => {
     // Append bookmark to DB
     bookmarks.push(bookmark)
     const payload = JSON.stringify(bookmarks.filter(Boolean), { spaces: 2 })
-    await fs.writeFile(BOOKMARKS, payload.replace(/{/g, '\n{'), 'utf8')
+    await fs.writeFile(process.env.BOOKMARKS, payload.replace(/{/g, '\n{'), 'utf8')
 
     res.json({ bookmark })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    next(error)
   }
 }

@@ -1,0 +1,27 @@
+input[type=search].filter {
+  z-index: 1;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+
+  &:not(:focus):placeholder-shown {
+    background: var(--color--background);
+
+    // Show on desktop only via tab
+    @include desktop {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  &::placeholder {
+    color: var(--color--dim);
+  }
+}
+
+.filter:not(:placeholder-shown) ~ .list [data-filter]:not(.is-result) { display: none; }
+.filter:not(:placeholder-shown) ~ .list { flex: 1; }

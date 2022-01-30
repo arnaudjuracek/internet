@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8'>
-  <title>Internet</title>
+  <title>Internet/articles</title>
   <link rel='icon' href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>'>
   <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui' />
 
@@ -10,32 +10,36 @@
   <link rel='stylesheet' href='/bundle.css'>
   {{/if}}
 </head>
-<body data-template='bookmarks'>
+<body data-template='articles'>
   <input class='filter' type='search' placeholder='Filter…'>
 
   <ul class='list'>
     <input type='checkbox' id='showAll'>
-    {{#each bookmarks}}
-      <li data-filter='{{this.title}} {{this.hostname}}'>
+    {{#each articles}}
+      <li data-filter='{{this.title}} {{this.hostname}} {{this.description}}'>
         <div class='swiper'>
           <a
-            class='list__item'
+            class='list__item{{#if this.archived}} is-archived{{/if}}'
             href='{{this.url}}'
-            title='{{this.title}} ({{this.hostname}})'
+            title='{{this.title}}'
           >
             <img class='list__item-favicon' src='{{this.favicon}}' loading='lazy'>
             <span class='list__item-title'>{{{this.title}}}</span>
             <span class='list__item-hostname'>{{this.hostname}}</span>
           </a>
+
+          {{#unless this.archived}}
           <div class='swiper__actions'>
-            <button data-delete='{{this.url}}' tabindex='-1'>delete</button>
+            <button data-archive='{{this.url}}' tabindex='-1'>archive</button>
           </div>
+          {{/unless}}
+
         </div>
       </li>
     {{/each}}
     <label for='showAll'>show all</label>
   </ul>
-  <a id='goTo' href='/articles' >articles</a>
+  <a href='/' id='goTo'>bookmarks</a>
   <script src='/bundle.js'></script>
 </body>
 </html>

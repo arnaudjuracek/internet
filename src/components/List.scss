@@ -1,0 +1,79 @@
+$list-length: 20;
+
+.list {
+  list-style: none;
+  padding: var(--gutter);
+  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
+
+  li {
+    margin: 0.3em 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+    color: var(--color--text);
+
+    overflow: hidden;
+    white-space: nowrap;
+
+    width: fit-content;
+    max-width: 100%;
+
+    @include mobile {
+      width: 100%;
+    }
+  }
+
+  &__item:focus,
+  &__item:hover {
+    outline: 0;
+    background: var(--color--highlight);
+  }
+
+  &__item-favicon {
+    @include no-select;
+    height: 1em;
+    width: 1em;
+    margin-right: 1ch;
+  }
+
+  &__item-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__item-hostname {
+    @include no-select;
+    margin-left: 1ch;
+    color: var(--color--dim);
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  label[for=showAll] {
+    @include no-select;
+    position: relative;
+    cursor: pointer;
+    float: right;
+    color: var(--color--dim);
+
+    margin-top: 1em;
+
+    &:hover {
+      color: blue;
+    }
+  }
+
+  #showAll,
+  #showAll:not(:checked) ~ li:nth-child(#{$list-length}) ~ li,
+  #showAll:checked ~ label[for=showAll] {
+    display: none;
+  }
+}

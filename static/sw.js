@@ -4,6 +4,8 @@ const NS = '{{PACKAGE_NAME}}@{{PACKAGE_VERSION}}'
 const CACHE = [
   '/',
   '/index.html',
+  '/articles',
+  '/articles.html',
   'bundle.css',
   'bundle.js'
 ]
