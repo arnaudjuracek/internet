@@ -16,13 +16,12 @@
   <ul>
     <input type='checkbox' id='showAll'>
     {{#each bookmarks}}
-      <li>
+      <li data-filter='{{this.title}} {{this.hostname}}'>
         <div class='swiper'>
           <a
             class='bookmark'
             href='{{this.url}}'
             title='{{this.title}} ({{this.hostname}})'
-            data-search='{{this.title}} {{this.hostname}}'
           >
             <img class='bookmark__favicon' src='{{this.favicon}}' loading='lazy'>
             <span class='bookmark__title'>{{{this.title}}}</span>

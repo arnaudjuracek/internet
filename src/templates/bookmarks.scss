@@ -130,7 +130,7 @@ body[data-template=bookmarks] {
   }
 
   // Search bar feature
-  input[type=search]:not(:placeholder-shown) ~ ul li .bookmark:not(.is-result) { display: none; }
+  input[type=search]:not(:placeholder-shown) ~ ul li:not(.is-result) { display: none; }
   input[type=search]:not(:placeholder-shown) ~ ul { flex: 1; }
 
   // Show all feature

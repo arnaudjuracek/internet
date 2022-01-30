@@ -14,14 +14,14 @@ if ('serviceWorker' in navigator) {
 // Search bar
 const search = document.querySelector('input[type=search]')
 if (search) {
-  const bookmarks = document.querySelectorAll('.bookmark')
+  const items = document.querySelectorAll('[data-filter]')
   const showAll = document.getElementById('showAll')
   search.addEventListener('input', e => {
     if (showAll) showAll.checked = !!search.value
 
-    for (const bookmark of bookmarks) {
-      const match = bookmark.dataset.search.toUpperCase().includes(search.value.toUpperCase())
-      bookmark.classList.toggle('is-result', match)
+    for (const item of items) {
+      const match = item.dataset.filter.toUpperCase().includes(search.value.toUpperCase())
+      item.classList.toggle('is-result', match)
     }
   })
 }
