@@ -1,6 +1,5 @@
 const fs = require('fs-extra')
 const path = require('path')
-const favicon = require('../utils/get-favicon-url')
 const YAML = require('yaml')
 const template = require('handlebars').compile(
   fs.readFileSync(
@@ -57,7 +56,7 @@ module.exports = async (req, res) => {
       filename,
       markdown,
       lastmod: (await fs.stat(file)).mtime,
-      favicon: favicon(url)
+      favicon: `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${(frontMatter && frontMatter.icon) || '🗄'}</text></svg>`
     })
   }
 
