@@ -94,7 +94,6 @@ body[data-template=bookmarks] {
     display: flex;
     overflow-x: scroll;
     scroll-snap-type: x;
-    overscroll-behavior: none;
 
     & > *:first-child {
       scroll-snap-align: start;
