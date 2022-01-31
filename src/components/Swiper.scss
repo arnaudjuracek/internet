@@ -11,13 +11,14 @@
   }
 
   &__actions {
-    scroll-snap-align: start;
-    padding-left: var(--gutter);
+    display: flex;
   }
 
   &__actions button {
     @include reset-button;
+    scroll-snap-align: start end;
     color: blue;
     cursor: pointer;
+    margin-left: 1ch;
   }
 }

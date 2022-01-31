@@ -2,15 +2,18 @@ const fs = require('fs-extra')
 
 module.exports = async (req, res, next) => {
   try {
+    if (!req.body.title) throw new Error('Invalid title')
+
     // Read bookmarks
     const bookmarks = await fs.readJson(process.env.BOOKMARKS)
 
-    // Delete relevant bookmark
-    let deleted
+    // Rename relevant bookmark
+    let renamed
     for (const index in bookmarks) {
       if (bookmarks[index].url === req.body.url) {
-        deleted = bookmarks[index]
-        delete bookmarks[index]
+        const previousTitle = bookmarks[index].title
+        bookmarks[index].title = req.body.title
+        renamed = { ...bookmarks[index], previousTitle }
       }
     }
 
@@ -18,8 +21,8 @@ module.exports = async (req, res, next) => {
     const payload = JSON.stringify(bookmarks.filter(Boolean), { spaces: 2 })
     await fs.writeFile(process.env.BOOKMARKS, payload.replace(/{/g, '\n{'), 'utf8')
 
-    // Send back deleted bookmark, in case client implements undo
-    res.json({ deleted })
+    // Send back renamed bookmark, in case client implements undo
+    res.json({ renamed })
   } catch (error) {
     next(error)
   }

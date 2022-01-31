@@ -1,23 +1,21 @@
-/* global fetch */
+import bindAPIButton from 'utils/bind-api-button'
 
-// Handle delete buttons
-for (const button of document.querySelectorAll('button[data-delete]')) {
-  button.addEventListener('click', async e => {
-    e.stopPropagation()
-    e.preventDefault()
+bindAPIButton('button[data-delete]', {
+  endpoint: '/api/bookmark',
+  method: 'DELETE',
+  json: button => ({ url: button.dataset.delete }),
+  onSuccess: button => button.parentNode.parentNode.remove()
+})
 
-    const response = await fetch(window.location.origin + '/api/bookmark', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: button.dataset.delete })
-    })
-
-    if (!response.ok) return window.alert(`[${response.status}] ${response.statusText}`)
-
-    const data = await response.json()
-    if (data.error) return window.alert(data.error)
-
-    console.log(data)
-    button.parentNode.parentNode.remove()
-  })
-}
+bindAPIButton('button[data-rename]', {
+  endpoint: '/api/bookmark',
+  method: 'PATCH',
+  json: button => {
+    const title = window.prompt('Rename bookmark', button.dataset.default)
+    return title && { title, url: button.dataset.rename }
+  },
+  onSuccess: (button, data) => {
+    const title = button.parentNode.parentNode.querySelector('.list__item-title')
+    if (title) title.textContent = data.renamed.title
+  }
+})
