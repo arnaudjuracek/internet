@@ -9,6 +9,16 @@
 $ curl -X POST -H 'Authorization: Basic API_TOKEN' -H 'Content-Type: application/json' --data '{ "url": "https://example.com" }' …/api/bookmark
 ```
 
+### API
+
+| endpoint | method | body | description |
+| :------- | :----- | :--: | :---------- |
+| `/api/article` | `POST` | `{ url }` | Add a new bookmark |
+| `/api/article` | `DELETE` | `{ url }` | Delete a bookmark |
+| `/api/article` | `PATCH` | `{ url, title }` | Rename a bookmark |
+| `/api/bookmark` | `POST` | `{ url }` | Save a new article |
+| `/api/bookmark` | `DELETE` | `{ url }` | Archive an article |
+
 ## Development
 
 ### Installation
