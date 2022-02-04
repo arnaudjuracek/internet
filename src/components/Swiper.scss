@@ -3,6 +3,11 @@
   display: flex;
   scroll-snap-type: x;
 
+  @include mobile {
+    direction: rtl;
+    * { direction: ltr; }
+  }
+
   & > *:first-child {
     scroll-snap-align: start;
     flex-grow: 2;
@@ -19,6 +24,9 @@
     scroll-snap-align: start end;
     color: blue;
     cursor: pointer;
-    margin-left: 1ch;
+    margin: 0 1ch;
+    & + button {
+      margin-left: 0;
+    }
   }
 }
