@@ -15,7 +15,11 @@ bindAPIButton('button[data-rename]', {
     return title && { title, url: button.dataset.rename }
   },
   onSuccess: (button, data) => {
-    const title = button.parentNode.parentNode.querySelector('.list__item-title')
+    const row = button.parentNode.parentNode
+    if (!row) return
+
+    const title = row.querySelector('.list__item-title')
     if (title) title.textContent = data.renamed.title
+    row.scrollLeft = 0
   }
 })
