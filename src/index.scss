@@ -54,6 +54,7 @@ body[data-template=articles] {
     @include desktop {
       &:not(:focus-within) {
         border: 0;
+        background: transparent;
       }
     }
 
