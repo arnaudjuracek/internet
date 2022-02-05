@@ -2143,8 +2143,8 @@ bytes@3.1.1:
   integrity sha512-dWe4nWO/ruEOY7HkUJ5gFt1DCFV9zPRoJr8pV0/ASQermOZjtq8jMjOprC0Kd10GLN+l7xaUPvxzJFWtxGu8Fg==
 
 cabinet@arnaudjuracek/cabinet:
-  version "1.2.2"
-  resolved "https://codeload.github.com/arnaudjuracek/cabinet/tar.gz/8df2508a038e8f72b1df6e4538a3b067c44e053a"
+  version "1.2.3"
+  resolved "https://codeload.github.com/arnaudjuracek/cabinet/tar.gz/0a1ae0fbbd99a70be92a6487a3fb3130b8c0f910"
   dependencies:
     "@mozilla/readability" "^0.4.1"
     download "^8.0.0"
