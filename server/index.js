@@ -90,9 +90,9 @@ app.use('/articles', require('./render/articles'))
 app.use('/', require('./render/bookmarks'))
 
 // Log errors
-app.use((err, req, res, next) => {
-  console.error(new Date(), err)
-  res.status(500).json({ error: err.message })
+app.use((error, req, res, next) => {
+  console.error(new Date(), error)
+  res.status(500).json({ error })
 })
 
 // Start server

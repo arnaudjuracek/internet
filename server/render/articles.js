@@ -34,39 +34,43 @@ function parseFrontMatter (markdown) {
   return frontMatter
 }
 
-module.exports = async (req, res) => {
-  const articles = []
-  const unread = process.env.ARTICLES
-  const archived = path.join(process.env.ARTICLES, 'archived')
+module.exports = async (req, res, next) => {
+  try {
+    const articles = []
+    const unread = process.env.ARTICLES
+    const archived = path.join(process.env.ARTICLES, 'archived')
 
-  for (const file of await getFiles([unread, archived], ['.md'])) {
-    const filename = path.basename(file)
-    const archived = path.basename(path.dirname(file)) === 'archived'
-    const markdown = await fs.readFile(file, 'utf8')
-    const frontMatter = parseFrontMatter(markdown)
-    const url = archived
-      ? process.env.ARTICLES_URL + 'archived/' + filename
-      : process.env.ARTICLES_URL + filename
+    for (const file of await getFiles([unread, archived], ['.md'])) {
+      const filename = path.basename(file)
+      const archived = path.basename(path.dirname(file)) === 'archived'
+      const markdown = await fs.readFile(file, 'utf8')
+      const frontMatter = parseFrontMatter(markdown)
+      const url = archived
+        ? process.env.ARTICLES_URL + 'archived/' + filename
+        : process.env.ARTICLES_URL + filename
 
-    articles.push({
-      ...frontMatter,
-      url: url.replace(/.md$/, ''),
-      archived,
-      title: frontMatter ? frontMatter.title : filename,
-      filename,
-      markdown,
-      lastmod: (await fs.stat(file)).mtime,
-      favicon: `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${(frontMatter && frontMatter.icon) || '🗄'}</text></svg>`
-    })
-  }
-
-  res.send(template({
-    isProduction: process.env.NODE_ENV !== 'development',
-    articles: articles
-      .sort((a, b) => {
-        if (a.archived && !b.archived) return 1
-        return b.lastmod - a.lastmod
+      articles.push({
+        ...frontMatter,
+        url: url.replace(/.md$/, ''),
+        archived,
+        title: frontMatter ? frontMatter.title : filename,
+        filename,
+        markdown,
+        lastmod: (await fs.stat(file)).mtime,
+        favicon: `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${(frontMatter && frontMatter.icon) || '🗄'}</text></svg>`
       })
-      .filter(Boolean)
-  }))
+    }
+
+    res.send(template({
+      isProduction: process.env.NODE_ENV !== 'development',
+      articles: articles
+        .sort((a, b) => {
+          if (a.archived && !b.archived) return 1
+          return b.lastmod - a.lastmod
+        })
+        .filter(Boolean)
+    }))
+  } catch (error) {
+    next(error)
+  }
 }
