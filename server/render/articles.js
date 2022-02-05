@@ -32,6 +32,8 @@ function parseFrontMatter (markdown, file) {
       frontMatter.author = { name, email, website }
     }
 
+    frontMatter.title = frontMatter.title.replace(/\r?\n|\r/g, '')
+
     return frontMatter
   } catch (error) {
     console.warn(`Error while parsing front matter block of ${file}`)
