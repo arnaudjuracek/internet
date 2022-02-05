@@ -1,11 +1,11 @@
 ---
 title: |
-  {{ title }}
+  "{{ title }}"
 description: |
-  {{ excerpt }}
+  "{{ excerpt }}"
 lang: en
 icon: 🗄️
-author: {{ byline }} ({{ url }})
+author: "{{ byline }} ({{ url }})"
 ---
 
 # {{ title }}
