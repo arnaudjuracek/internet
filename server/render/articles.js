@@ -1,12 +1,12 @@
 const fs = require('fs-extra')
 const path = require('path')
 const YAML = require('yaml')
-const template = require('handlebars').compile(
-  fs.readFileSync(
-    path.join(__dirname, '..', '..', 'src', 'templates', 'articles.hbs'),
-    'utf8'
-  )
-)
+const template = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'templates', 'list.hbs'), 'utf8')
+const render = require('handlebars').compile(template)
+
+const ACTIONS = {
+  archive: { label: 'archive', method: 'DELETE', endpoint: '/api/article' }
+}
 
 async function getFiles (directories, extensions = []) {
   const files = []
@@ -43,10 +43,11 @@ function parseFrontMatter (markdown, file) {
 
 module.exports = async (req, res, next) => {
   try {
-    const articles = []
     const unread = process.env.ARTICLES
     const archived = path.join(process.env.ARTICLES, 'archived')
 
+    // Create an array containing all articles and their informations
+    const articles = []
     for (const file of await getFiles([unread, archived], ['.md'])) {
       const filename = path.basename(file)
       const archived = path.basename(path.dirname(file)) === 'archived'
@@ -68,15 +69,22 @@ module.exports = async (req, res, next) => {
       })
     }
 
-    res.send(template({
+    // Render the HTML content
+    const html = render({
+      title: 'Internet',
+      type: 'bookmarks',
       isProduction: process.env.NODE_ENV !== 'development',
-      articles: articles
-        .sort((a, b) => {
-          if (a.archived && !b.archived) return 1
-          return b.lastmod - a.lastmod
-        })
-        .filter(Boolean)
-    }))
+      switch: { label: 'bookmarks', href: '/' },
+      items: articles.filter(Boolean).map(article => ({
+        ...article,
+        class: article.archived ? '' : 'bold',
+        actions: article.archived
+          ? [ACTIONS.rename, ACTIONS.delete]
+          : [ACTIONS.rename, ACTIONS.archive]
+      }))
+    })
+
+    res.send(html)
   } catch (error) {
     next(error)
   }

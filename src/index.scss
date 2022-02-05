@@ -27,51 +27,7 @@
 @import 'sass/base';
 
 @import 'components/Filter';
-@import 'components/List';
 @import 'components/Swiper';
 
-@import 'templates/articles';
+@import 'templates/list';
 @import 'templates/authenticate';
-
-body[data-template=bookmarks],
-body[data-template=articles] {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-bottom: 3em;
-
-  footer {
-    z-index: 1;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-
-    border-top: 1px solid var(--color--border);
-    background: var(--color--background);
-
-    @include desktop {
-      &:not(:focus-within) {
-        border: 0;
-        background: transparent;
-      }
-    }
-
-    &:focus-within {
-      background: white;
-    }
-
-    input[type=search] {
-      padding-right: 0;
-    }
-
-    a {
-      padding: 0 var(--gutter);
-      &:not(:hover) {
-        color: var(--color--dim);
-      }
-    }
-  }
-}
-

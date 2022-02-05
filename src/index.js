@@ -1,6 +1,4 @@
-import 'components/Filter'
-import 'templates/articles'
-import 'templates/bookmarks'
+import 'templates/list'
 
 /// #if DEVELOPMENT
 require('webpack-hot-middleware/client?reload=true')
