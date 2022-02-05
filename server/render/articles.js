@@ -21,17 +21,22 @@ async function getFiles (directories, extensions = []) {
   return files
 }
 
-function parseFrontMatter (markdown) {
-  const frontMatter = YAML.parse(
-    (markdown.match(/^---(([\s\S])+?)---/) || [])[1] || ''
-  )
+function parseFrontMatter (markdown, file) {
+  try {
+    const frontMatter = YAML.parse(
+      (markdown.match(/^---(([\s\S])+?)---/) || [])[1] || ''
+    )
 
-  if (frontMatter && frontMatter.author) {
-    const [, name, email, website] = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/g.exec(frontMatter.author) || []
-    frontMatter.author = { name, email, website }
+    if (frontMatter && frontMatter.author) {
+      const [, name, email, website] = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/g.exec(frontMatter.author) || []
+      frontMatter.author = { name, email, website }
+    }
+
+    return frontMatter
+  } catch (error) {
+    console.warn(`Error while parsing front matter block of ${file}`)
+    console.warn(error)
   }
-
-  return frontMatter
 }
 
 module.exports = async (req, res, next) => {
@@ -44,7 +49,7 @@ module.exports = async (req, res, next) => {
       const filename = path.basename(file)
       const archived = path.basename(path.dirname(file)) === 'archived'
       const markdown = await fs.readFile(file, 'utf8')
-      const frontMatter = parseFrontMatter(markdown)
+      const frontMatter = parseFrontMatter(markdown, file)
       const url = archived
         ? process.env.ARTICLES_URL + 'archived/' + filename
         : process.env.ARTICLES_URL + filename
