@@ -5,6 +5,15 @@ const template = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'templa
 const render = require('handlebars').compile(template)
 
 const ACTIONS = {
+  rename: {
+    label: 'rename',
+    method: 'PATCH',
+    endpoint: '/api/article',
+    input: {
+      key: 'title',
+      message: 'Rename article'
+    }
+  },
   archive: { label: 'archive', method: 'DELETE', endpoint: '/api/article' }
 }
 
@@ -71,15 +80,15 @@ module.exports = async (req, res, next) => {
 
     // Render the HTML content
     const html = render({
-      title: 'Internet',
-      type: 'bookmarks',
+      title: 'Internet/articles',
+      type: 'articles',
       isProduction: process.env.NODE_ENV !== 'development',
       switch: { label: 'bookmarks', href: '/' },
       items: articles.filter(Boolean).map(article => ({
         ...article,
         class: article.archived ? '' : 'bold',
         actions: article.archived
-          ? [ACTIONS.rename, ACTIONS.delete]
+          ? [ACTIONS.rename]
           : [ACTIONS.rename, ACTIONS.archive]
       }))
     })

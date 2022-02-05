@@ -71,11 +71,15 @@ app.use(express.static(path.join(__dirname, '..', 'build')))
 app.use(express.static(path.join(__dirname, '..', 'static')))
 
 // Setup API
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
 app.use('/api', require('./api/authenticate'))
 app.post('/api/article', require('./api/add-article'))
+app.patch('/api/article', require('./api/rename-article'))
 app.delete('/api/article', require('./api/archive-article'))
+
 app.post('/api/bookmark', require('./api/add-bookmark'))
 app.patch('/api/bookmark', require('./api/rename-bookmark'))
 app.delete('/api/bookmark', require('./api/delete-bookmark'))
