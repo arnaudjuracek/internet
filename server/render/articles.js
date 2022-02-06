@@ -36,6 +36,10 @@ function parseFrontMatter (markdown, file) {
       (markdown.match(/^---(([\s\S])+?)---/) || [])[1] || ''
     )
 
+    // Strip surounding double-quotes
+    if (frontMatter && frontMatter.title) frontMatter.title = frontMatter.title.replace(/^"(.*)"\s?$/, '$1')
+    if (frontMatter && frontMatter.description) frontMatter.description = frontMatter.description.replace(/^"(.*)"\s?$/, '$1')
+
     if (frontMatter && frontMatter.author) {
       const [, name, email, website] = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/g.exec(frontMatter.author) || []
       frontMatter.author = { name, email, website }
