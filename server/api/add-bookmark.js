@@ -1,5 +1,4 @@
 const fs = require('fs-extra')
-const path = require('path')
 const fetch = require('node-fetch')
 
 module.exports = async (req, res, next) => {
@@ -20,9 +19,10 @@ module.exports = async (req, res, next) => {
 
     // Create a new bookmark
     const body = await response.text()
+    const title = (body.match(/<title.*?>([\S\s]*)<\/title>/i) || [])[1]
     const bookmark = {
       timestamp: Date.now(),
-      title: body.match(/<title.*?>(.*)<\/title>/i)[1],
+      title: (title || req.body.url).replace(/[\n\r\t]/g, ''),
       url: req.body.url
     }
 
