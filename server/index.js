@@ -96,7 +96,7 @@ app.use('/', require('./render/bookmarks'))
 // Log errors
 app.use((error, req, res, next) => {
   console.error(new Date(), error)
-  res.status(500).json({ error })
+  res.status(500).json({ error: error.message || error })
 })
 
 // Start server
