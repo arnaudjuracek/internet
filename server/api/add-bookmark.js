@@ -19,7 +19,7 @@ module.exports = async (req, res, next) => {
 
     // Create a new bookmark
     const body = await response.text()
-    const title = (body.match(/<title.*?>([\S\s]*)<\/title>/i) || [])[1]
+    const title = (body.match(/<title.*?>([\S\s]*?)<\/title>/i) || [])[1]
     const bookmark = {
       timestamp: Date.now(),
       title: (title || req.body.url).replace(/[\n\r\t]/g, ''),
