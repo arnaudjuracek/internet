@@ -4,11 +4,6 @@
   scroll-snap-type: x;
   gap: 1ch;
 
-  @include mobile {
-    * { direction: ltr; }
-    &, &__actions { direction: rtl; }
-  }
-
   & > *:first-child {
     scroll-snap-align: start;
     flex-grow: 2;
