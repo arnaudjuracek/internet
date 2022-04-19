@@ -11,13 +11,25 @@ $ curl -X POST -H 'Authorization: Basic API_TOKEN' -H 'Content-Type: application
 
 ### API
 
+app.post('/api/article', require('./api/article/add'))
+app.patch('/api/article', require('./api/article/rename'))
+app.patch('/api/article/archive', require('./api/article/archive'))
+app.delete('/api/article', require('./api/article/delete'))
+
+app.post('/api/bookmark', require('./api/bookmark/add'))
+app.patch('/api/bookmark', require('./api/bookmark/rename'))
+app.delete('/api/bookmark', require('./api/bookmark/delete'))
+
+
 | endpoint | method | body | description |
 | :------- | :----- | :--: | :---------- |
-| `/api/article` | `POST` | `{ url }` | Add a new bookmark |
-| `/api/article` | `DELETE` | `{ url }` | Delete a bookmark |
-| `/api/article` | `PATCH` | `{ url, title }` | Rename a bookmark |
-| `/api/bookmark` | `POST` | `{ url }` | Save a new article |
-| `/api/bookmark` | `DELETE` | `{ url }` | Archive an article |
+| `/api/article` | `POST` | `{ url }` | Add a new article |
+| `/api/article` | `PATCH` | `{ url, title }` | Rename an article |
+| `/api/article/archive` | `PATCH` | `{ url, title }` | Rename an article |
+| `/api/article` | `DELETE` | `{ url }` | Delete an article |
+| `/api/bookmark` | `POST` | `{ url }` | Save a new bookmark |
+| `/api/bookmark` | `PATCH` | `{ url }` | Rename a bookmark |
+| `/api/bookmark` | `DELETE` | `{ url }` | Delete a bookmark |
 
 ## Development
 
