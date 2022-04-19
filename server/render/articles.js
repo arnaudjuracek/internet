@@ -14,7 +14,8 @@ const ACTIONS = {
       message: 'Rename article'
     }
   },
-  archive: { label: 'archive', method: 'DELETE', endpoint: '/api/article' }
+  archive: { label: 'archive', method: 'PATCH', endpoint: '/api/article/archive' },
+  delete: { label: 'delete', method: 'DELETE', endpoint: '/api/article' }
 }
 
 async function getFiles (directories, extensions = []) {
@@ -97,7 +98,7 @@ module.exports = async (req, res, next) => {
           ...article,
           class: article.archived ? '' : 'bold',
           actions: article.archived
-            ? [ACTIONS.rename]
+            ? [ACTIONS.rename, ACTIONS.delete]
             : [ACTIONS.rename, ACTIONS.archive]
         }))
     })
