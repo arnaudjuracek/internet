@@ -76,13 +76,13 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/api', require('./api/authenticate'))
-app.post('/api/article', require('./api/add-article'))
-app.patch('/api/article', require('./api/rename-article'))
-app.delete('/api/article', require('./api/archive-article'))
+app.post('/api/article', require('./api/article/add'))
+app.patch('/api/article', require('./api/article/rename'))
+app.delete('/api/article', require('./api/article/archive'))
 
-app.post('/api/bookmark', require('./api/add-bookmark'))
-app.patch('/api/bookmark', require('./api/rename-bookmark'))
-app.delete('/api/bookmark', require('./api/delete-bookmark'))
+app.post('/api/bookmark', require('./api/bookmark/add'))
+app.patch('/api/bookmark', require('./api/bookmark/rename'))
+app.delete('/api/bookmark', require('./api/bookmark/delete'))
 
 // Setup front routes
 app.use('/logout', (req, res, next) => {
