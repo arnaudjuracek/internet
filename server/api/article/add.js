@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
     const filename = await cabinet(req.body.url, {
       output: path.join(process.env.ARTICLES, '{{title}}.md'),
       download: path.join(process.env.ARTICLES, 'medias'),
-      template: path.join(__dirname, '..', 'article.md')
+      template: path.join(__dirname, '..', '..', 'article.md')
     })
 
     res.send({
