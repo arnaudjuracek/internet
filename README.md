@@ -11,25 +11,17 @@ $ curl -X POST -H 'Authorization: Basic API_TOKEN' -H 'Content-Type: application
 
 ### API
 
-app.post('/api/article', require('./api/article/add'))
-app.patch('/api/article', require('./api/article/rename'))
-app.patch('/api/article/archive', require('./api/article/archive'))
-app.delete('/api/article', require('./api/article/delete'))
-
-app.post('/api/bookmark', require('./api/bookmark/add'))
-app.patch('/api/bookmark', require('./api/bookmark/rename'))
-app.delete('/api/bookmark', require('./api/bookmark/delete'))
-
-
-| endpoint | method | body | description |
-| :------- | :----- | :--: | :---------- |
-| `/api/article` | `POST` | `{ url }` | Add a new article |
-| `/api/article` | `PATCH` | `{ url, title }` | Rename an article |
-| `/api/article/archive` | `PATCH` | `{ url, title }` | Rename an article |
-| `/api/article` | `DELETE` | `{ url }` | Delete an article |
-| `/api/bookmark` | `POST` | `{ url }` | Save a new bookmark |
-| `/api/bookmark` | `PATCH` | `{ url }` | Rename a bookmark |
-| `/api/bookmark` | `DELETE` | `{ url }` | Delete a bookmark |
+| method | endpoint | body | description |
+| :----- | :------- | :--- | :---------- |
+| `POST`  | `/api/article` | `{ url }` | Add a new article |
+| `PATCH` | `/api/article` | `{ url, title }` | Rename an article |
+| `PATCH` | `/api/article/archive` |  `{ url }` | Archive an article |
+| `DELETE` | `/api/article` | `{ url }` | Delete an article |
+| `POST`  | `/api/bookmark` | `{ url }` | Save a new bookmark |
+| `PATCH` | `/api/bookmark` | `{ url }` | Rename a bookmark |
+| `DELETE` | `/api/bookmark` | `{ url }` | Delete a bookmark |
+| `POST` | `/api/medias` | `{ url, download: true }` | Add a media | 
+| `DELETE` | `/api/medias` | `{ url }` | Delete a media | 
 
 ## Development
 
