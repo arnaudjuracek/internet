@@ -20,8 +20,6 @@ $ curl -X POST -H 'Authorization: Basic API_TOKEN' -H 'Content-Type: application
 | `POST`  | `/api/bookmark` | `{ url }` | Save a new bookmark |
 | `PATCH` | `/api/bookmark` | `{ url }` | Rename a bookmark |
 | `DELETE` | `/api/bookmark` | `{ url }` | Delete a bookmark |
-| `POST` | `/api/medias` | `{ url, download: true }` | Add a media | 
-| `DELETE` | `/api/medias` | `{ url }` | Delete a media | 
 
 ## Development
 
