@@ -75,20 +75,10 @@ app.use(express.static(path.join(__dirname, '..', 'static')))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// Setup API routes
-app.use('/api', require('./api/authenticate'))
-app.post('/api/article', require('./api/article/add'))
-app.patch('/api/article', require('./api/article/rename'))
-app.patch('/api/article/archive', require('./api/article/archive'))
-app.delete('/api/article', require('./api/article/delete'))
-app.post('/api/bookmark', require('./api/bookmark/add'))
-app.patch('/api/bookmark', require('./api/bookmark/rename'))
-app.delete('/api/bookmark', require('./api/bookmark/delete'))
-
 // Rebuild cache when API is reached
 for (const [endpoint, render, filename] of [
-  ['/api/article', require('./render/articles'), 'articles.html'],
-  ['/api/bookmark', require('./render/bookmarks'), 'bookmarks.html']
+  [['/api/article', '/api/article/*'], require('./render/articles'), 'articles.html'],
+  [['/api/bookmark', '/api/bookmark/*'], require('./render/bookmarks'), 'bookmarks.html']
 ]) app.use(endpoint, async (req, res, next) => {
   res.on('finish', async () => {
     return fs.outputFile(
@@ -98,6 +88,16 @@ for (const [endpoint, render, filename] of [
   })
   next()
 })
+
+// Setup API routes
+app.use('/api', require('./api/authenticate'))
+app.post('/api/article', require('./api/article/add'))
+app.patch('/api/article', require('./api/article/rename'))
+app.patch('/api/article/archive', require('./api/article/archive'))
+app.delete('/api/article', require('./api/article/delete'))
+app.post('/api/bookmark', require('./api/bookmark/add'))
+app.patch('/api/bookmark', require('./api/bookmark/rename'))
+app.delete('/api/bookmark', require('./api/bookmark/delete'))
 
 // Setup front routes
 app.use('/logout', (req, res, next) => {
