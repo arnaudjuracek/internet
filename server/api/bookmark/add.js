@@ -33,6 +33,7 @@ module.exports = async (req, res, next) => {
     await fs.writeFile(process.env.BOOKMARKS, payload.replace(/{/g, '\n{'), 'utf8')
 
     res.json({ bookmark })
+    next()
   } catch (error) {
     next(error)
   }

@@ -6,6 +6,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
 process.env.ARTICLES = path.join(__dirname, process.env.ARTICLES)
 process.env.BOOKMARKS = path.join(__dirname, process.env.BOOKMARKS)
+process.env.CACHE = path.join(__dirname, process.env.CACHE || '.cache')
 
 const fs = require('fs-extra')
 const http = require('http')
@@ -71,28 +72,43 @@ app.use(express.static(path.join(__dirname, '..', 'build')))
 app.use(express.static(path.join(__dirname, '..', 'static')))
 
 // Setup API
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// Setup API routes
 app.use('/api', require('./api/authenticate'))
 app.post('/api/article', require('./api/article/add'))
 app.patch('/api/article', require('./api/article/rename'))
 app.patch('/api/article/archive', require('./api/article/archive'))
 app.delete('/api/article', require('./api/article/delete'))
-
 app.post('/api/bookmark', require('./api/bookmark/add'))
 app.patch('/api/bookmark', require('./api/bookmark/rename'))
 app.delete('/api/bookmark', require('./api/bookmark/delete'))
+
+// Rebuild cache when API is reached
+for (const [endpoint, render, filename] of [
+  ['/api/article/*', require('./render/articles'), 'articles.html'],
+  ['/api/bookmark/*', require('./render/bookmarks'), 'bookmarks.html']
+]) app.use(endpoint, async (req, res, next) => {
+  try {
+    await fs.ensureFile
+    await fs.outputFile(
+      path.join(process.env.CACHE, filename),
+      await render()
+    )
+  } catch (error) {
+    next(error)
+  }
+})
 
 // Setup front routes
 app.use('/logout', (req, res, next) => {
   req.session.authenticated = false
   req.session.save(() => res.redirect('/'))
 })
-app.use(require('./render/authenticate'))
-app.use('/articles', require('./render/articles'))
-app.use('/', require('./render/bookmarks'))
+app.use(require('./middleware/authenticate'))
+app.use('/articles', express.static(path.join(process.env.CACHE, 'articles.html')))
+app.use('/', express.static(path.join(process.env.CACHE, 'bookmarks.html')))
 
 // Log errors
 app.use((error, req, res, next) => {

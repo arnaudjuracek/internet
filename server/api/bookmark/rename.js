@@ -23,6 +23,7 @@ module.exports = async (req, res, next) => {
 
     // Send back renamed bookmark, in case client implements undo
     res.json({ renamed })
+    next()
   } catch (error) {
     next(error)
   }
