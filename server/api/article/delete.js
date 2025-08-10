@@ -13,7 +13,6 @@ module.exports = async (req, res, next) => {
 
     // Send back archived article, in case client implements undo
     res.json({ archived: req.body.url })
-    next()
   } catch (error) {
     next(error)
   }

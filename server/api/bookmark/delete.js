@@ -20,7 +20,6 @@ module.exports = async (req, res, next) => {
 
     // Send back deleted bookmark, in case client implements undo
     res.json({ deleted })
-    next()
   } catch (error) {
     next(error)
   }

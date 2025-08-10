@@ -87,18 +87,16 @@ app.delete('/api/bookmark', require('./api/bookmark/delete'))
 
 // Rebuild cache when API is reached
 for (const [endpoint, render, filename] of [
-  ['/api/article/*', require('./render/articles'), 'articles.html'],
-  ['/api/bookmark/*', require('./render/bookmarks'), 'bookmarks.html']
+  ['/api/article', require('./render/articles'), 'articles.html'],
+  ['/api/bookmark', require('./render/bookmarks'), 'bookmarks.html']
 ]) app.use(endpoint, async (req, res, next) => {
-  try {
-    await fs.ensureFile
-    await fs.outputFile(
+  res.on('finish', async () => {
+    return fs.outputFile(
       path.join(process.env.CACHE, filename),
       await render()
     )
-  } catch (error) {
-    next(error)
-  }
+  })
+  next()
 })
 
 // Setup front routes
@@ -106,9 +104,9 @@ app.use('/logout', (req, res, next) => {
   req.session.authenticated = false
   req.session.save(() => res.redirect('/'))
 })
-app.use(require('./middleware/authenticate'))
-app.use('/articles', express.static(path.join(process.env.CACHE, 'articles.html')))
-app.use('/', express.static(path.join(process.env.CACHE, 'bookmarks.html')))
+// app.use(require('./middleware/authenticate'))
+app.use('/articles', (req, res) => res.sendFile(path.join(process.env.CACHE, 'articles.html')))
+app.use('/', (req, res) => res.sendFile(path.join(process.env.CACHE, 'bookmarks.html')))
 
 // Log errors
 app.use((error, req, res, next) => {

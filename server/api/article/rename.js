@@ -21,7 +21,6 @@ module.exports = async (req, res, next) => {
     await fs.writeFile(file, content, 'utf8')
 
     res.json(({ renamed: req.body.url }))
-    next()
   } catch (error) {
     next(error)
   }

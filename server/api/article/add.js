@@ -12,8 +12,6 @@ module.exports = async (req, res, next) => {
     res.send({
       url: process.env.ARTICLES_URL + path.basename(filename)
     })
-
-    next()
   } catch (error) {
     next(error)
   }
