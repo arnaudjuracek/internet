@@ -104,7 +104,7 @@ app.use('/logout', (req, res, next) => {
   req.session.authenticated = false
   req.session.save(() => res.redirect('/'))
 })
-// app.use(require('./middleware/authenticate'))
+app.use(require('./middleware/authenticate'))
 app.use('/articles', (req, res) => res.sendFile(path.join(process.env.CACHE, 'articles.html')))
 app.use('/', (req, res) => res.sendFile(path.join(process.env.CACHE, 'bookmarks.html')))
 
